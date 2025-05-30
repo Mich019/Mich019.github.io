@@ -1,0 +1,23 @@
+.acordeon {
+    margin: 10px;
+}
+.boton-acordeon {
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    background: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.contenido {
+    padding: 0 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #f9f9f9;
+}
+.contenido.mostrar {
+    max-height: 200px; /* Ajusta según tu contenido */
+    padding: 10px;
+}
