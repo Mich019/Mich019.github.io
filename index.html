@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Desarrollo Sustentable</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f5f9f8; color: #2d3e50; line-height: 1.6; }
+        
+        .header {
+            background: linear-gradient(135deg, #287271 0%, #1a4b5e 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .title { font-size: 26px; font-weight: 600; margin-bottom: 5px; }
+        .subtitle { font-size: 16px; opacity: 0.9; }
+        
+        .main-container {
+            max-width: 1000px;
+            margin: 25px auto;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .tabs-container {
+            display: flex;
+            background-color: #e0f0ed;
+            border-bottom: 1px solid #cce2dd;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2d3e50;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .tab:hover { background-color: #d1e7e1; }
+        .tab.active { background-color: white; color: #287271; border-bottom: 3px solid #287271; }
+        
+        .content { padding: 25px; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 { color: #287271; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #e0f0ed; }
+        h3 { color: #2d3e50; margin: 25px 0 15px; font-size: 20px; }
+        p { margin-bottom: 15px; color: #4a5568; }
+        
+        .student-info {
+            background-color: #f8fcfb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #287271;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item strong { display: block; color: #287271; margin-bottom: 3px; font-size: 14px; }
+        .info-item span { font-size: 15px; }
+        
+        .documents-container { margin-top: 25px; }
+        
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: #f8fcfb;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .document-item:hover {
+            background-color: #e0f0ed;
+            transform: translateX(5px);
+        }
+        
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #287271 0%, #1a4b5e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .document-icon svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+        
+        .document-text { flex-grow: 1; }
+        .document-title { font-weight: 600; margin-bottom: 3px; }
+        .document-desc { font-size: 13px; color: #718096; }
+        
+        .pdf-viewer-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .pdf-viewer-content {
+            width: 90%;
+            height: 90%;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #287271;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .pdf-embed {
+            width: 100%;
+            height: calc(100% - 40px);
+            border: none;
+            margin-top: 20px;
+        }
+        
+        .image-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .image-button {
+            aspect-ratio: 1 / 1;
+            background-color: #e6f0ff;
+            border: 2px solid #ffffff;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .image-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .image-button img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        
+        @media (max-width: 768px) {
+            .content { padding: 18px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .document-item { padding: 10px 12px; }
+            .image-buttons-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">Portafolio de Evidencias</div>
+        <div class="subtitle">Desarrollo Sustentable</div>
+    </div>
+    
+    <div class="main-container">
+        <div class="tabs-container">
+            <div class="tab active" onclick="showSection('inicio')">Inicio</div>
+            <div class="tab" onclick="showSection('unit1')">Unidad 1</div>
+            <div class="tab" onclick="showSection('unit2')">Unidad 2</div>
+            <div class="tab" onclick="showSection('unit3')">Unidad 3</div>
+            <div class="tab" onclick="showSection('unit4')">Unidad 4</div>
+            <div class="tab" onclick="showSection('unit5')">Unidad 5</div>
+        </div>
+        
+        <div class="content">
+            <!-- SECCIÓN INICIO -->
+            <div id="inicio" class="section active">
+                <h2>Información del Alumno</h2>
+                <div class="student-info">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Nombre:</strong>
+                            <span>Diego Axel Tapia Hernandez</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Institución:</strong>
+                            <span>Instituto Tecnológico de Lazaro Cardenas</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Grupo:</strong>
+                            <span>41-T</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Número de Control:</strong>
+                            <span>23560321</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2>Presentación del Portafolio</h2>
+                <p>Este portafolio recopila las evidencias de aprendizaje de la materia de Desarrollo Sustentable, organizadas por unidades temáticas.</p>
+                <p>Utiliza las pestañas superiores para navegar entre las diferentes unidades y revisar los trabajos realizados durante el curso.</p>
+            </div>
+            
+            <!-- SECCIÓN UNIDAD 1 -->
+            <div id="unit1" class="section">
+                <h2>Unidad 1: Introducción al Desarrollo Sustentable</h2>
+                <p>Conceptos fundamentales, principios, historia y aplicación del desarrollo sustentable en el contexto actual.</p>
+                
+                <div class="documents-container">
+                    <h3>Trabajos y Actividades</h3>
+                    
+                    <!-- EJEMPLO DE DOCUMENTO - REPETIR ESTE BLOQUE PARA CADA ARCHIVO -->
+                    <div class="document-item" onclick="openPdf('docs/investigacion-campo.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Investigación de campo de escenarios sustentables</div>
+                            <div class="document-desc">Documento PDF - Investigación práctica</div>
+                        </div>
+                    </div>
+                    <!-- FIN EJEMPLO -->
+                    
+                    <div class="document-item" onclick="openPdf('UNIDAD 1 Desarrollo sustentable.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes Unidad 1</div>
+                            <div class="document-desc">Documento PDF - Contenido de la unidad</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Primer Sesión  Desarrollo Sustentable.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Primer sesion Desarrollo Sustentable</div>
+                            <div class="document-desc">Documento PDF - Contenido de la unidad</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Temario.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Temario</div>
+                            <div class="document-desc">Documento PDF - Contenido del curso</div>
+                        </div>
+                    </div>
+                    
+                    <div class="document-item" onclick="openPdf('Conceptos.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Tarea: ¿Qué es la sustentabilidad?</div>
+                            <div class="document-desc">Documento PDF - Eje económico y ecológico</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Conceptos 2.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Coceptos Basicos</div>
+                            <div class="document-desc">Conceptos</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Conceptos 2.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes de la Unidad</div>
+                            <div class="document-desc">Presentacion</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Examen1.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Examen Unidad 1</div>
+                            <div class="document-desc">Examen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN UNIDAD 2 -->
+            <div id="unit2" class="section">
+                <h2>Unidad 2: Escenario natural</h2>
+                <p>Exploración de las dimensiones ambiental, económica y social, y su interrelación en el desarrollo sustentable.</p>
+                
+                <div class="documents-container">
+                    <h3>Trabajos y Actividades</h3>
+                    
+                    <div class="document-item" onclick="openPdf('Unidad 2 Desarrollo Sustentable A.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes Unidad 2</div>
+                            <div class="document-desc">Documento PDF - Contenido de la unidad</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Geotormenta.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <path d="M8 13v4"></path>
+                                <path d="M16 13v4"></path>
+                                <path d="M12 13v4"></path>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Reporte de Geo tormenta</div>
+                            <div class="document-desc">Documento PDF - Impacto ambiental</div>
+                        </div>
+                    </div>
+                    
+                    <div class="document-item" onclick="window.open('https://vm.tiktok.com/ZMBJKpqf6/', '_blank', 'width=1000,height=800')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Video en equipo</div>
+                            <div class="document-desc">Conceptos</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Conceptos 2.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Investigacion de Campo</div>
+                            <div class="document-desc"></div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Conceptos 2.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes de la Unidad</div>
+                            <div class="document-desc">Presentacion</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- SECCIÓN UNIDAD 3 -->
+            <div id="unit3" class="section">
+                <h2>Unidad 3: Escenario Socio-Cultural</h2>
+                <p>Análisis de problemas ambientales globales y soluciones sustentables desde diferentes perspectivas.</p>
+                
+                <div class="documents-container">
+                    <h3>Trabajos y Actividades</h3>
+                    
+                    <div class="document-item" onclick="openPdf('Unidad 3 Desarrollo Sustentable.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes Unidad 3</div>
+                            <div class="document-desc">Documento PDF - Contenido de la unidad</div>
+                        </div>
+                    </div>
+
+                    <div class="document-item" onclick="openPdf('Video.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Resumen del vídeo: Eliminación de plástico</div>
+                            <div class="document-desc">Documento PDF - Análisis crítico</div>
+                        </div>
+                    </div>
+                    
+                    <div class="document-item" onclick="openPdf('Cuadro sinóptico LEGEEPA 1s.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">La LEEGEPA</div>
+                            <div class="document-desc">Documento PDF - Marco legal</div>
+                        </div>
+                    </div>
+                    <h3>Objetivos de Desarrollo Sostenible (ODS)</h3>
+                    <div class="image-buttons-grid">
+                        <!-- 17 botones cuadrados para imágenes -->
+                        <div class="image-button" onclick="openPdf('1.pdf')">
+                            <img src="Imagen 1.jpg" alt="ODS 1">
+                        </div>
+                        <div class="image-button" onclick="openPdf('2.pdf')">
+                            <img src="Imagen 2.jpg" alt="ODS 2">
+                        </div>
+                        <div class="image-button" onclick="openPdf('3.pdf')">
+                            <img src="Imagen 3.jpg" alt="ODS 3">
+                        </div>
+                        <div class="image-button" onclick="openPdf('4.pdf')">
+                            <img src="Imagen 4.jpg" alt="ODS 4">
+                        </div>
+                        <div class="image-button" onclick="openPdf('5.pdf')">
+                            <img src="Imagen 5.jpg" alt="ODS 5">
+                        </div>
+                        <div class="image-button" onclick="openPdf('6.pdf')">
+                            <img src="Imagen 6.jpg" alt="ODS 6">
+                        </div>
+                        <div class="image-button" onclick="openPdf('7.pdf')">
+                            <img src="Imagen 7.jpg" alt="ODS 7">
+                        </div>
+                        <div class="image-button" onclick="openPdf('8.pdf')">
+                            <img src="Imagen 8.jpg" alt="ODS 8">
+                        </div>
+                        <div class="image-button" onclick="openPdf('9.pdf')">
+                            <img src="Imagen 9.jpg" alt="ODS 9">
+                        </div>
+                        <div class="image-button" onclick="openPdf('10.pdf')">
+                            <img src="Imagen 10.jpg" alt="ODS 10">
+                        </div>
+                        <div class="image-button" onclick="openPdf('11.pdf')">
+                            <img src="Imagen 11.jpg" alt="ODS 11">
+                        </div>
+                        <div class="image-button" onclick="openPdf('12.pdf')">
+                            <img src="Imagen 12.jpg" alt="ODS 12">
+                        </div>
+                        <div class="image-button" onclick="openPdf('13.pdf')">
+                            <img src="Imagen 13.jpg" alt="ODS 13">
+                        </div>
+                        <div class="image-button" onclick="openPdf('14.pdf')">
+                            <img src="Imagen 14.jpg" alt="ODS 14">
+                        </div>
+                        <div class="image-button" onclick="openPdf('15.pdf')">
+                            <img src="Imagen 15.jpg" alt="ODS 15">
+                        </div>
+                        <div class="image-button" onclick="openPdf('16.pdf')">
+                            <img src="Imagen 16.jpg" alt="ODS 16">
+                        </div>
+                        <div class="image-button" onclick="openPdf('17.pdf')">
+                            <img src="Imagen 17.jpg" alt="ODS 17">
+                        </div>
+                    </div>
+                    <div class="document-item" onclick="openPdf('Cuadro sinóptico LEGEEPA 1s.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Proyecto de implementación</div>
+                            <div class="document-desc">Proyecto del ODS 4</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN UNIDAD 4 -->
+<div id="unit4" class="section">
+    <h2>Unidad 4: Desarrollo económico y sustentabilidad</h2>
+    <p>Análisis de los aspectos económicos en relación con el medio ambiente y los servicios ambientales.</p>
+    
+    <div class="documents-container">
+        <h3>Trabajos y Actividades</h3>
+        
+        <div class="document-item" onclick="openPdf('Unidad 4 Desarrollo Sustentable.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes Unidad 4</div>
+                            <div class="document-desc">Documento PDF - Contenido de la unidad</div>
+                        </div>
+                    </div>
+
+        <div class="document-item" onclick="openPdf('Servicios Ambientales.pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <path d="M8 13v4"></path>
+                    <path d="M16 13v4"></path>
+                    <path d="M12 13v4"></path>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Servicios Ambientales</div>
+                <div class="document-desc">Documento PDF - Importancia y tipos</div>
+            </div>
+        </div>
+        
+        <div class="document-item" onclick="window.open('Historia')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 12l-7-7v4H3v6h13v4z"></path>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Resumen del video Historia de las cosas</div>
+                <div class="document-desc">Análisis del sistema de producción</div>
+            </div>
+        </div>
+
+        <div class="document-item" onclick="openPdf('PIB mexicano.pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">PIB Mexicano, qué es y cómo se distribuye</div>
+                <div class="document-desc">Documento PDF - Indicadores económicos</div>
+            </div>
+        </div>
+
+        <div class="document-item" onclick="openPdf('Conceptos(1).pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Conceptos clave</div>
+                <div class="document-desc">Glosario y definiciones importantes</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SECCIÓN UNIDAD 5 -->
+<div id="unit5" class="section">
+    <h2>Unidad 5: Impacto ambiental y sustentabilidad</h2>
+    <p>Análisis de la huella ecológica, contaminación y situación ambiental en México.</p>
+    
+    <div class="documents-container">
+        <h3>Trabajos y Actividades</h3>
+
+        <div class="document-item" onclick="openPdf('UNIDAD 5 Desarrollo sustentable.pdf')">
+                        <div class="document-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <line x1="10" y1="9" x2="8" y2="9"></line>
+                            </svg>
+                        </div>
+                        <div class="document-text">
+                            <div class="document-title">Apuntes Unidad 5</div>
+                            <div class="document-desc">Documento PDF - Contenido de la unidad</div>
+                        </div>
+                    </div>
+        
+        <div class="document-item" onclick="openPdf('Huella_Ecologica.pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <path d="M8 13v4"></path>
+                    <path d="M16 13v4"></path>
+                    <path d="M12 13v4"></path>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Huella Ecológica</div>
+                <div class="document-desc">Documento PDF - Cálculo e importancia</div>
+            </div>
+        </div>
+        
+        <div class="document-item" onclick="window.open('https://www.youtube.com/watch?v=ejemplo_contaminacion', '_blank', 'width=1000,height=800')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 12l-7-7v4H3v6h13v4z"></path>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Tipos de contaminación ambiental</div>
+                <div class="document-desc">Video educativo sobre impactos ambientales</div>
+            </div>
+        </div>
+
+        <div class="document-item" onclick="openPdf('SituacionMexico.pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Situación ambiental de México</div>
+                <div class="document-desc">Documento PDF - Estadísticas y problemáticas</div>
+            </div>
+        </div>
+
+        <div class="document-item" onclick="openPdf('Reporte_Siembra.pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <path d="M12 10v4"></path>
+                    <path d="M12 16v-2"></path>
+                    <circle cx="12" cy="9" r="1"></circle>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Reporte de Siembra</div>
+                <div class="document-desc">Guía para elaboración de reportes de siembra</div>
+            </div>
+        </div>
+
+        <div class="document-item" onclick="openPdf('Soluciones_Sustentables.pdf')">
+            <div class="document-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+            </div>
+            <div class="document-text">
+                <div class="document-title">Soluciones Sustentables</div>
+                <div class="document-desc">Alternativas para reducir el impacto ambiental</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+    </div>
+    
+    <!-- Visor de PDF -->
+    <div id="pdfViewer" class="pdf-viewer-container">
+        <div class="pdf-viewer-content">
+            <button class="close-btn" onclick="closePdf()">×</button>
+            <iframe id="pdfFrame" class="pdf-embed" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+    
+    <div class="footer">
+        © 2025 Portafolio de Desarrollo Sustentable - Instituto Tecnológico de Lázaro Cárdenas
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Desactivar todas las pestañas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Activar la pestaña seleccionada
+            event.currentTarget.classList.add('active');
+        }
+        
+        function openPdf(pdfUrl) {
+            document.getElementById('pdfFrame').src = pdfUrl;
+            document.getElementById('pdfViewer').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Evita el scroll en el fondo
+        }
+        
+        function closePdf() {
+            document.getElementById('pdfViewer').style.display = 'none';
+            document.getElementById('pdfFrame').src = '';
+            document.body.style.overflow = 'auto'; // Restaura el scroll
+        }
+        
+        // Cerrar el PDF al hacer clic fuera del visor
+        document.getElementById('pdfViewer').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closePdf();
+            }
+        });
+    </script>
+</body>
+</html>
